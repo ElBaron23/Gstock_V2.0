@@ -1,53 +1,98 @@
+/* Reset */
 * {
     margin: 0;
     padding: 0;
+    box-sizing: border-box;
+}
 
-}
-body{
-    background: #f0f0f0;
-    font-family: Arial, Helvetica, sans-serif;
-}
-.gcontainer{
-    width: 90%;
-    height: 300px;
+body {
+    height: 100vh;
+    background: linear-gradient(135deg, #667eea, #764ba2);
     display: flex;
     justify-content: center;
     align-items: center;
-    
-    border: 1px solid #ccc;
-    position: relative;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, 50%);
-    border-radius: 12px;
-    background: rgba(253, 253, 253, 0.5);
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    backdrop-filter: blur(10px);
 }
-.gcontainer  form{
+
+.gcontainer {
+    width: 90%;
+    max-width: 450px;
+    padding: 30px;
     display: flex;
     flex-direction: column;
-   
-    align-items: center;
-    width: 60%;
-    height: 100%;
-    h1{
-        text-align: center;
-        margin-bottom: 20px;
-        color: #333;
-        font-size: 24px;
-        font-weight: bold;
-        margin-top: 16px;
-    }
-}
-.img{
-  width: 40%;
-  display: flex;
     justify-content: center;
     align-items: center;
+    border-radius: 12px;
+    background: rgba(255, 255, 255, 0.65);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+    backdrop-filter: blur(10px);
+    position: relative;
+}
 
-    img{
-        width: 150px;
-        height: 150px;
+.gcontainer form {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+.gcontainer form h1 {
+    text-align: center;
+    margin-bottom: 20px;
+    color: #333;
+    font-size: 24px;
+    font-weight: bold;
+}
+
+.input-group {
+    margin-bottom: 15px;
+}
+
+.input-group-text {
+    background-color: #e9ecef;
+}
+
+.btn-primary {
+    padding: 10px;
+    font-size: 1rem;
+    transition: all 0.3s ease;
+}
+
+.btn-primary:hover {
+    background-color: #556cd6;
+    transform: translateY(-2px);
+}
+
+.img {
+    margin-top: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.img img {
+    width: 120px;
+    height: 120px;
+}
+
+footer {
+    margin-top: 20px;
+    font-size: 0.8rem;
+    color: #555;
+    text-align: center;
+}
+
+/* Responsive */
+@media (max-width: 576px) {
+    .gcontainer {
+        width: 90%;
+        padding: 20px;
+    }
+
+    .img {
+        display: none;
+    }
+
+    footer {
+        font-size: 0.75rem;
+        color: #fff;
     }
 }

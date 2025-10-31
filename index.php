@@ -1,64 +1,70 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <link rel="stylesheet" href="./css/index.css">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Gstck</title>
-    <link rel="shortcut icon" href="./img/in-stock.png" type="image/x-icon">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
-</head>
-<body>
-    <?php
-    include 'inc/conn.php';
-    session_start();
-    if(isset($_POST['login'])){
-        // Replace 'email' and 'password' below with the actual column names in your 'login' table if they are different
-        $login = $conn->prepare("SELECT * FROM login WHERE user = :user AND password = :password");
-        $login->bindParam(":user", $_POST["user"]);
-        $login->bindParam(":password", $_POST["password"]);
-        $login->execute();
-       
+<?php
+include 'inc/conn.php';
+session_start();
+
+$error = '';
+
+if(isset($_POST['login'])){
+    $login = $conn->prepare("SELECT * FROM login WHERE user = :user AND password = :password");
+    $login->bindParam(":user", $_POST["user"]);
+    $login->bindParam(":password", $_POST["password"]);
+    $login->execute();
+
     if($login->rowCount() === 1){
         $user = $login->fetchObject();
         $_SESSION['user'] = $user->id;
         header("Location: home.php");
-        header("location:home.php",true);
+        exit;
     } else {
-        echo "<script>alert('Invalid email or password');</script>";
+        $error = 'البريد الإلكتروني أو كلمة المرور غير صحيحة';
     }
-    }
-
-
+}
 ?>
+
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gstck</title>
+    <link rel="stylesheet" href="css/index.css">
+    <link rel="shortcut icon" href="./img/in-stock.png" type="image/x-icon">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+    
+</head>
+<body>
+    
 <div class="gcontainer">
-    <form method="POST">
-     <h1>Login</h1>
+    <form method="POST" novalidate>
+        <h2 class="text-center mb-4">تسجيل الدخول</h2>
 
-     <div class="col-md-6" style="padding: 8px; width: 90%;">
-    <label for="inputEmail4" class="form-label">Email</label>
-    <input type="text" class="form-control" id="inputEmail4" name="user">
-  </div>
+        <?php if($error): ?>
+            <div class="error-msg"><?= $error ?></div>
+        <?php endif; ?>
 
-<div class="col-md-6" style="padding: 8px; width: 90%;">
-    <label for="inputPassword4" class="form-label">Password</label>
-    <input type="password" class="form-control"  name="password" id="inputPassword4">
-  </div>
+        <div class="mb-3 input-group">
+            <span class="input-group-text"><i class="fas fa-envelope"></i></span>
+            <input type="text" class="form-control" placeholder="البريد الإلكتروني" name="user" required>
+        </div>
 
-  <button class="btn btn-primary  mt-3" name="login" type="submit" style="width: 90%;">login</button>
+        <div class="mb-3 input-group">
+            <span class="input-group-text"><i class="fas fa-lock"></i></span>
+            <input type="password" class="form-control" placeholder="كلمة المرور" name="password" required>
+        </div>
+
+        <button type="submit" name="login" class="btn btn-primary w-100">تسجيل الدخول</button>
     </form>
 
-
     <div class="img">
-        <img src="./img/in-stock.png" alt="Gstock">
+        <img src="./img/in-stock.png" alt="Gstock" class="img-fluid">
     </div>
 
+    <footer class="text-center mt-3">
+        &copy; 2025 جميع الحقوق محفوظة | مطور بواسطة <strong>imad touzouz</strong> | النسخة الحالية v2.0
+    </footer>
 </div>
-<footer class="text-center mt-4 mb-2 text-muted small">
-    &copy; 2025 جميع الحقوق محفوظة | مطور بواسطة <strong>imad touzouz</strong> | النسخة الحالية v2.0
-</footer>
 
-
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

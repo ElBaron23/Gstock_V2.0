@@ -3,6 +3,10 @@ session_start();
 
 
 include 'inc/conn.php';
+if(!isset($_SESSION['user'])){
+    header("Location: index.php");
+    exit;
+}
 
 // جلب بيانات المستخدم
 $stmt = $conn->prepare("SELECT * FROM login WHERE id = :id");
@@ -30,8 +34,64 @@ $total_value = $conn->query("SELECT SUM(quantity * price) FROM products")->fetch
     </style>
 </head>
 <body dir="rtl">
+<style>
+    .navbar .btn {
+    width: 45px;
+    height: 45px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 1.2rem;
+    transition: all 0.3s ease;
+}
 
+.navbar .btn:hover {
+    background-color: #495057;
+    transform: scale(1.1);
+}
+
+.badge {
+    font-size: 0.7rem;
+}
+
+</style>
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+  <div class="container-fluid" style="display: flex; align-items: center; justify-content: space-between;">
+    <a class="navbar-brand" href="home.php">إدارة المخزن</a>
+
+    <div class="d-flex align-items-center  gap-2">
+<?php
+// جلب عدد الإشعارات من قاعدة البيانات حسب المستخدم الحالي
+$stmt = $conn->prepare("SELECT COUNT(*) as notif_count FROM notifications WHERE user_id = :user_id AND is_read = 0");
+$stmt->bindParam(":user_id", $_SESSION['user']);
+$stmt->execute();
+$notif_count = $stmt->fetch(PDO::FETCH_ASSOC)['notif_count'];
+?>
+      <!-- أيقونة الإشعارات -->
+<a href="notifications.php" class="btn btn-dark position-relative rounded-circle p-2">
+    <i class="fas fa-bell"></i>
+    <?php if($notif_count > 0): ?>
+    <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+        <?= $notif_count ?>
+    </span>
+    <?php endif; ?>
+</a>
+
+        <!-- أيقونة الإعدادات -->
+        <a href="settings.php" class="btn btn-dark rounded-circle p-2">
+            <i class="fas fa-cog"></i>
+        </a>
+
+        <!-- أيقونة تسجيل الخروج -->
+        <a href="logout.php" class="btn btn-danger rounded-circle p-2">
+            <i class="fas fa-sign-out-alt"></i>
+        </a>
+
+    </div>
+  </div>
+</nav>
+
+<!-- <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
   <div class="container-fluid">
     <a class="navbar-brand" href="home.php">إدارة المخزن</a>
     <div class="d-flex">
@@ -39,7 +99,7 @@ $total_value = $conn->query("SELECT SUM(quantity * price) FROM products")->fetch
         <a class="btn btn-outline-danger" href="logout.php">تسجيل الخروج</a>
     </div>
   </div>
-</nav>
+</nav> -->
 
 
 <div class="container mt-5">
